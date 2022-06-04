@@ -23,12 +23,10 @@ export class PostService {
 
   update(id: number, updatePostDto: UpdatePostDto) {
     const foundPost = this.posts.find((post) => post.id === id);
-    if (updatePostDto.title) {
-      foundPost.title = updatePostDto.title;
+    for (const findKey in updatePostDto) {
+      foundPost[findKey] ? (foundPost[findKey] = updatePostDto[findKey]) : false;
     }
-    if (updatePostDto.body) {
-      foundPost.body = updatePostDto.body;
-    }
+    return { message: 'Post was updated' };
   }
 
   remove(id: number) {

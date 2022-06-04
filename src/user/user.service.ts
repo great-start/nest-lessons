@@ -21,9 +21,9 @@ export class UserService {
   }
 
   update(userDto: CreateUserDto) {
-    const find = this.users.find((user) => user.id === userDto.id);
-    for (const findKey in find) {
-      find[findKey] = userDto[findKey];
+    const userFromDb = this.users.find((user) => user.id === userDto.id);
+    for (const findKey in userDto) {
+      userFromDb[findKey] ? (userFromDb[findKey] = userDto[findKey]) : false;
     }
   }
 
