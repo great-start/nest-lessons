@@ -1,0 +1,37 @@
+import { Injectable } from '@nestjs/common';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+
+@Injectable()
+export class PostService {
+  private posts = [];
+
+  create(createPostDto: CreatePostDto) {
+    this.posts.push({
+      ...createPostDto,
+      id: new Date().valueOf(),
+    });
+  }
+
+  findAll() {
+    return this.posts;
+  }
+
+  findOne(id: number) {
+    return this.posts.find((post) => post.id === id);
+  }
+
+  update(id: number, updatePostDto: UpdatePostDto) {
+    const foundPost = this.posts.find((post) => post.id === id);
+    if (updatePostDto.title) {
+      foundPost.title = updatePostDto.title;
+    }
+    if (updatePostDto.body) {
+      foundPost.body = updatePostDto.body;
+    }
+  }
+
+  remove(id: number) {
+    this.posts = this.posts.filter((post) => post.id !== id);
+  }
+}

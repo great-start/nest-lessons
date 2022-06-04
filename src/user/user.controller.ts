@@ -19,7 +19,7 @@ export class UserController {
   }
 
   @HttpCode(HttpStatus.CREATED)
-  @Post('/:id')
+  @Post()
   createUser(@Body() userDto: CreateUserDto) {
     return this.userService.createUser(userDto);
   }
