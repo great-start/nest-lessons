@@ -13,11 +13,11 @@ export class PostService {
     });
   }
 
-  findAll() {
+  getAll() {
     return this.posts;
   }
 
-  findOne(id: number) {
+  getOne(id: number) {
     return this.posts.find((post) => post.id === id);
   }
 

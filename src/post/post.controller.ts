@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -15,14 +16,14 @@ export class PostController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  findAll() {
-    return this.postService.findAll();
+  getAll() {
+    return this.postService.getAll();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  getOne(@Param('id') id: string) {
+    return this.postService.getOne(+id);
   }
 
   @HttpCode(HttpStatus.OK)

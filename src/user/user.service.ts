@@ -19,4 +19,15 @@ export class UserService {
       id: new Date().valueOf(),
     });
   }
+
+  update(userDto: CreateUserDto) {
+    const find = this.users.find((user) => user.id === userDto.id);
+    for (const findKey in find) {
+      find[findKey] = userDto[findKey];
+    }
+  }
+
+  delete(id: string) {
+    this.users = this.users.filter((user) => user.id !== +id);
+  }
 }
