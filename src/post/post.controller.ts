@@ -23,18 +23,18 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   getOne(@Param('id') id: string) {
-    return this.postService.getOne(+id);
+    return this.postService.getOne(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  update(@Body() updatePostDto: UpdatePostDto, @Param('id') id: string) {
+    return this.postService.update(updatePostDto, id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+    return this.postService.remove(id);
   }
 }

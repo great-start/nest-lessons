@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString, Length, Max, Min } from 'class-validator';
 
-export class CreateUserDto {
+export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   @Length(2, 20)
@@ -14,8 +14,4 @@ export class CreateUserDto {
   @Min(15)
   @Max(99)
   age: number;
-
-  @IsString()
-  @IsNotEmpty()
-  readonly password: string;
 }

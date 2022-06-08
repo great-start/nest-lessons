@@ -1,35 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { PrismaService } from '../prisma.service';
+import { Post, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PostService {
-  private posts = [];
+  constructor(private prismaService: PrismaService) {}
 
-  create(createPostDto: CreatePostDto) {
-    this.posts.push({
-      ...createPostDto,
-      id: new Date().valueOf(),
+  async getAll(): Promise<Post[]> {
+    return this.prismaService.post.findMany();
+  }
+
+  async create(data: Prisma.PostCreateInput): Promise<Post> {
+    return this.prismaService.post.create({ data });
+  }
+
+  async getOne(id: string): Promise<Post> {
+    return this.prismaService.post.findUnique({
+      where: { id },
     });
   }
 
-  getAll() {
-    return this.posts;
+  async update(data: Prisma.PostUpdateInput, id: string): Promise<Post> {
+    return this.prismaService.post.update({
+      where: { id },
+      data: { title: data.title, content: data.content },
+    });
   }
 
-  getOne(id: number) {
-    return this.posts.find((post) => post.id === id);
-  }
-
-  update(id: number, updatePostDto: UpdatePostDto) {
-    const foundPost = this.posts.find((post) => post.id === id);
-    for (const findKey in updatePostDto) {
-      foundPost[findKey] ? (foundPost[findKey] = updatePostDto[findKey]) : false;
-    }
-    return { message: 'Post was updated' };
-  }
-
-  remove(id: number) {
-    this.posts = this.posts.filter((post) => post.id !== id);
+  async remove(id: string): Promise<any> {
+    return this.prismaService.post.delete({
+      where: { id },
+    });
   }
 }
