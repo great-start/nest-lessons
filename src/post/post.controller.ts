@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -12,7 +22,11 @@ export class PostController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
+  create(
+    @Body()
+    createPostDto: CreatePostDto,
+  ) {
+    console.log(createPostDto);
     return this.postService.create(createPostDto);
   }
 
@@ -24,19 +38,30 @@ export class PostController {
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  getOne(@Param('id') id: string) {
+  getOne(
+    @Param('id')
+    id: string,
+  ) {
     return this.postService.getOne(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Patch(':id')
-  update(@Body() updatePostDto: UpdatePostDto, @Param('id') id: string) {
+  update(
+    @Body()
+    updatePostDto: UpdatePostDto,
+    @Param('id')
+    id: string,
+  ) {
     return this.postService.update(updatePostDto, id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(
+    @Param('id')
+    id: string,
+  ) {
     return this.postService.remove(id);
   }
 }

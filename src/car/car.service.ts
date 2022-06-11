@@ -16,20 +16,29 @@ export class CarService {
 
   async findOne(id: string): Promise<Car> {
     return this.prismaService.car.findUnique({
-      where: { id },
+      where: {
+        id,
+      },
     });
   }
 
   async update(data: Prisma.CarUpdateInput, id: string): Promise<Car> {
     return this.prismaService.car.update({
-      where: { id },
-      data: { model: data.model, year: data.year },
+      where: {
+        id,
+      },
+      data: {
+        model: data.model,
+        year: data.year,
+      },
     });
   }
 
   async remove(id: string): Promise<any> {
     return this.prismaService.car.delete({
-      where: { id },
+      where: {
+        id,
+      },
     });
   }
 }
