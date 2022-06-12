@@ -1,18 +1,8 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/jwt.guards';
 
 @ApiTags('users')
 @Controller('users')
@@ -20,13 +10,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiOperation({
-    summary: 'Get all users',
-  })
-  @ApiResponse({
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiOkResponse({
     status: 200,
+    schema: {
+      example: {
+        id: '',
+        name: '',
+      },
+    },
   })
-  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   getAll() {
     return this.userService.getAll();
   }
@@ -44,24 +38,6 @@ export class UserController {
     id: string,
   ) {
     return this.userService.getOneById(id);
-  }
-
-  @Post()
-  @ApiOperation({
-    summary: 'Create one user and save to DB',
-  })
-  @ApiResponse({
-    status: 200,
-  })
-  @ApiBody({
-    type: CreateUserDto,
-  })
-  @HttpCode(HttpStatus.CREATED)
-  createUser(
-    @Body()
-    userDto: CreateUserDto,
-  ) {
-    // return this.userService.createUser(userDto);
   }
 
   @Patch('/:id')

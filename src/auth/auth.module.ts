@@ -15,5 +15,6 @@ import { UserModule } from '../user/user.module';
       secret: process.env.SECRET_KEY,
     }),
   ],
+  exports: [],
 })
 export class AuthModule {}
