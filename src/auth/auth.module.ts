@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TokenService } from './token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
 import { UserModule } from '../user/user.module';
+import { RefreshMiddleware } from './middleware/refresh.middleware';
 
 @Module({
   controllers: [AuthController],
@@ -17,4 +18,8 @@ import { UserModule } from '../user/user.module';
   ],
   exports: [],
 })
-export class AuthModule {}
+export class AuthModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RefreshMiddleware).forRoutes('auth/refresh');
+  }
+}
