@@ -7,7 +7,7 @@ import { IRequestExtended } from '../interface/extented.requets.interface';
 import { UserService } from '../../user/user.service';
 
 @Injectable()
-export class RefreshMiddleware implements NestMiddleware {
+export class LogoutMiddleware implements NestMiddleware {
   constructor(private tokenService: TokenService,
               private jwtService: JwtService,
               private userService:UserService) {}

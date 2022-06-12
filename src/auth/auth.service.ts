@@ -73,8 +73,7 @@ export class AuthService {
     };
   }
 
-  async logout(userData: User, @Res() res: Response) {
+  async logout(userData: User) {
     await this.tokenService.deleteTokenPair(userData.id);
-    res.status.body({ message: 'You logged out' });
   }
 }

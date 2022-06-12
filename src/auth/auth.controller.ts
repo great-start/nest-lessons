@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Req } from '@nestjs/common';
+import { Controller, Post, Body, Req, HttpStatus, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthUserDto } from './dto/auth.user.dto';
-import { ApiBody, ApiHeader, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { IRequestExtended } from './interface/extented.requets.interface';
+import { Response } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -63,7 +64,8 @@ export class AuthController {
     description: 'Logout',
   })
   @Post('/logout')
-  logout(@Req() req: IRequestExtended) {
-    return this.authService.logout(req.userData);
+  async logout(@Req() req: IRequestExtended, @Res() res: Response) {
+    await this.authService.logout(req.userData);
+    res.status(HttpStatus.OK).json({ message: 'You are logged out' });
   }
 }
