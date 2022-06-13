@@ -67,9 +67,9 @@ export class AuthService {
   async refresh(userData: User): Promise<Partial<ITokenPair>> {
     await this.tokenService.deleteTokenPair(userData.id);
 
-    const tokenPair = await this.tokenService.getTokenPair(userData);
+    const newTokenPair = await this.tokenService.getTokenPair(userData);
 
-    const { accessToken, refreshToken } = await this.tokenService.saveTokenPair(tokenPair);
+    const { accessToken, refreshToken } = await this.tokenService.saveTokenPair(newTokenPair);
 
     return {
       accessToken,
