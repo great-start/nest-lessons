@@ -1,10 +1,11 @@
 import { Controller, Post, Body, Req, HttpStatus, Res } from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+
 import { AuthService } from './auth.service';
 import { AuthUserDto } from './dto/auth.user.dto';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { IRequestExtended } from './interface/extented.requets.interface';
-import { Response } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -16,7 +17,7 @@ export class AuthController {
     description: 'registration',
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     schema: {
       example: {
         accessToken: 'asd234vdce5te5b123vqfve5tb5t',
@@ -34,7 +35,15 @@ export class AuthController {
     summary: 'Login user using email and password',
     description: 'login',
   })
-  @ApiResponse({ status: 200 })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        accessToken: 'asd234vdce5te5b123vqfve5tb5t',
+        refreshToken: 'asd234vdce5te5b123vqfve5tb5t',
+      },
+    },
+  })
   @ApiBody({ type: AuthUserDto })
   @Post('/login')
   login(@Body() authUser: AuthUserDto) {
@@ -62,6 +71,9 @@ export class AuthController {
   @ApiOperation({
     summary: 'Logout',
     description: 'Logout',
+  })
+  @ApiOkResponse({
+    status: 200,
   })
   @Post('/logout')
   async logout(@Req() req: IRequestExtended, @Res() res: Response) {

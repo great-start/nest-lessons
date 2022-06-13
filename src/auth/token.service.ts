@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
 import { Prisma, User, Token } from '@prisma/client';
-import { ITokenPair } from './interface/auth.token.interface';
 import { JwtService } from '@nestjs/jwt';
+
+import { PrismaService } from '../prisma.service';
+import { ITokenPair } from './interface/auth.token.interface';
 
 @Injectable()
 export class TokenService {
@@ -28,7 +29,7 @@ export class TokenService {
 
   private _generateTokenPair(user: User): ITokenPair {
     const payload = { id: user.id, email: user.email, name: user.username };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '20s' });
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '40s' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '1d' });
 
     return {

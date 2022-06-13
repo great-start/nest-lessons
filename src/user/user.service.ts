@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
 import { Prisma, User } from '@prisma/client';
-import { CreateUserDto } from './dto/create-user.dto';
-import { AuthUserDto } from "../auth/dto/auth.user.dto";
+
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UserService {
@@ -24,10 +23,10 @@ export class UserService {
     });
   }
 
-  async getUserByEmail(user: CreateUserDto | AuthUserDto | User): Promise<User | null> {
+  async getUserByEmail(email: string): Promise<User | null> {
     return this.prismaService.user.findFirst({
       where: {
-        email: user.email,
+        email,
       },
     });
   }

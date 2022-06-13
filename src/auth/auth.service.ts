@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Res, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { UserService } from '../user/user.service';
@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private userService: UserService, private tokenService: TokenService) {}
 
   async register(userToCreate: CreateUserDto): Promise<Partial<ITokenPair>> {
-    const userFromDB = await this.userService.getUserByEmail(userToCreate);
+    const userFromDB = await this.userService.getUserByEmail(userToCreate.email);
 
     if (userFromDB) {
       throw new HttpException('User has already exist', HttpStatus.BAD_REQUEST);
@@ -49,14 +49,18 @@ export class AuthService {
   }
 
   private async _validateUser(user: AuthUserDto): Promise<User> {
-    const userFromDB = await this.userService.getUserByEmail(user);
+    const userFromDB = await this.userService.getUserByEmail(user.email);
+
+    if (!userFromDB) {
+      throw new UnauthorizedException({ message: 'Wrong email or password' });
+    }
 
     const comparedPass = await bcrypt.compare(user.password, userFromDB.password);
 
-    if (userFromDB && comparedPass) {
-      return userFromDB;
+    if (!comparedPass) {
+      throw new UnauthorizedException({ message: 'Wrong email or password' });
     }
-    throw new UnauthorizedException({ message: 'Wrong email or password' });
+    return userFromDB;
   }
 
   // refresh tokenPair
