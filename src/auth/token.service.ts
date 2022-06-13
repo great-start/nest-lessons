@@ -29,7 +29,7 @@ export class TokenService {
 
   private _generateTokenPair(user: User): ITokenPair {
     const payload = { id: user.id, email: user.email, name: user.username };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '40s' });
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '1d' });
 
     return {
