@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenService } from '../token.service';
 import { IRequestExtended } from '../interface/extented.requets.interface';
 import { UserService } from '../../user/user.service';
+import { constants } from '../../constants/constants';
 
 @Injectable()
 export class LogoutMiddleware implements NestMiddleware {
@@ -14,7 +15,7 @@ export class LogoutMiddleware implements NestMiddleware {
 
   async use(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const authHeader = req.headers['authorization'];
+      const authHeader = req.headers[constants.AUTHORIZATION];
       const bearer = authHeader.split(' ')[0];
       const accessToken = authHeader.split(' ')[1];
 

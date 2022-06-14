@@ -8,12 +8,14 @@ import { PrismaService } from '../prisma.service';
 import { UserModule } from '../user/user.module';
 import { RefreshMiddleware } from './middleware/refresh.middleware';
 import { LogoutMiddleware } from './middleware/logout.middleware';
+import { FilesModule } from '../files/files.module';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService, TokenService, PrismaService],
   imports: [
     UserModule,
+    FilesModule,
     JwtModule.register({
       secret: process.env.SECRET_KEY,
     }),

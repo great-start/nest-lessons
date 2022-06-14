@@ -7,32 +7,46 @@ import { TokenService } from './token.service';
 import { AuthUserDto } from './dto/auth.user.dto';
 import { User } from '@prisma/client';
 import { ITokenPair } from './interface/auth.token.interface';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService, private tokenService: TokenService) {}
+  constructor(
+    private userService: UserService,
+    private tokenService: TokenService,
+    private filesService: FilesService,
+  ) {}
 
-  async register(userToCreate: CreateUserDto): Promise<Partial<ITokenPair>> {
-    const userFromDB = await this.userService.getUserByEmail(userToCreate.email);
+  async register(userToCreate: CreateUserDto, file: Express.Multer.File): Promise<Partial<ITokenPair>> {
+    try {
+      const userFromDB = await this.userService.getUserByEmail(userToCreate.email);
 
-    if (userFromDB) {
-      throw new HttpException('User has already exist', HttpStatus.BAD_REQUEST);
+      if (userFromDB) {
+        throw new HttpException('User has already exist', HttpStatus.BAD_REQUEST);
+      }
+
+      this.filesService.fileValidate(file);
+      const filePath = await this.filesService.saveFile(file);
+
+      const hashPass = await bcrypt.hash(userToCreate.password, 5);
+      const savedUser = await this.userService.saveToDB({
+        ...userToCreate,
+        password: hashPass,
+        photo: filePath,
+      });
+
+      const tokenPair = await this.tokenService.getTokenPair(savedUser);
+
+      const { accessToken, refreshToken } = await this.tokenService.saveTokenPair(tokenPair);
+
+      return {
+        accessToken,
+        refreshToken,
+      };
+    } catch (e) {
+      console.log(e);
+      throw new HttpException(e.message, e.status);
     }
-
-    const hashPass = await bcrypt.hash(userToCreate.password, 5);
-    const savedUser = await this.userService.saveToDB({
-      ...userToCreate,
-      password: hashPass,
-    });
-
-    const tokenPair = await this.tokenService.getTokenPair(savedUser);
-
-    const { accessToken, refreshToken } = await this.tokenService.saveTokenPair(tokenPair);
-
-    return {
-      accessToken,
-      refreshToken,
-    };
   }
 
   async login(authUser: AuthUserDto) {

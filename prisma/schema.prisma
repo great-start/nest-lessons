@@ -13,6 +13,7 @@ model User {
   email    String @unique
   age      Int
   password String
+  photo    String @default("")
   posts    Post[]
   cars     Car[]
   Token    Token?
