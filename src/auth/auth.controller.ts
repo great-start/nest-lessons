@@ -7,7 +7,6 @@ import { AuthService } from './auth.service';
 import { AuthUserDto } from './dto/auth.user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { IRequestExtended } from './interface/extented.requets.interface';
-import { diskStorage } from 'multer';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -29,16 +28,7 @@ export class AuthController {
   })
   @ApiBody({ type: CreateUserDto })
   @Post('/register')
-  @UseInterceptors(
-    FileInterceptor('file'), {
-      storage: diskStorage( {
-        destination: './photos',
-        filename(req: e.Request, file: Express.Multer.File, callback: (error: (Error | null), filename: string) => void) {
-          }
-        }
-
-      )
-    } )
+  @UseInterceptors(FileInterceptor('file'))
   registration(@Body() createUser: CreateUserDto, @UploadedFile() file: Express.Multer.File) {
     return this.authService.register(createUser, file);
   }

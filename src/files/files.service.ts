@@ -24,7 +24,6 @@ export class FilesService {
     if (file) {
       const fileName = uuidv4() + path.extname(file.originalname);
       const picturePath = path.resolve('photos/', fileName);
-      console.log(picturePath);
 
       fs.writeFile(picturePath, file.buffer, (err) => {
         if (err) {
