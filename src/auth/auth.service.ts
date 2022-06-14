@@ -7,14 +7,12 @@ import { TokenService } from './token.service';
 import { AuthUserDto } from './dto/auth.user.dto';
 import { User } from '@prisma/client';
 import { ITokenPair } from './interface/auth.token.interface';
-import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private tokenService: TokenService,
-    private filesService: FilesService,
   ) {}
 
   async register(userToCreate: CreateUserDto, file: Express.Multer.File): Promise<Partial<ITokenPair>> {
@@ -25,14 +23,11 @@ export class AuthService {
         throw new HttpException('User has already exist', HttpStatus.BAD_REQUEST);
       }
 
-      this.filesService.fileValidate(file);
-      const filePath = await this.filesService.saveFile(file);
-
       const hashPass = await bcrypt.hash(userToCreate.password, 5);
       const savedUser = await this.userService.saveToDB({
         ...userToCreate,
         password: hashPass,
-        photo: filePath,
+        // photo: filePath,
       });
 
       const tokenPair = await this.tokenService.getTokenPair(savedUser);

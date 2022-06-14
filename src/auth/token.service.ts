@@ -9,17 +9,17 @@ import { ITokenPair } from './interface/auth.token.interface';
 export class TokenService {
   constructor(private prismaService: PrismaService, private jwtService: JwtService) {}
 
-  async saveTokenPair(tokenPair: Prisma.TokenUncheckedCreateInput) {
+  public async saveTokenPair(tokenPair: Prisma.TokenUncheckedCreateInput) {
     return this.prismaService.token.create({
       data: tokenPair,
     });
   }
 
-  getTokenPair(user: User) {
+  public getTokenPair(user: User) {
     return this._generateTokenPair(user);
   }
 
-  async getTokenFromDB(token: string): Promise<Token> {
+  public async getTokenFromDB(token: string): Promise<Token> {
     return this.prismaService.token.findFirst({
       where: {
         OR: [{ accessToken: token }, { refreshToken: token }],
@@ -39,7 +39,7 @@ export class TokenService {
     };
   }
 
-  async deleteTokenPair(id: string) {
+  public async deleteTokenPair(id: string) {
     await this.prismaService.token.delete({
       where: {
         userId: id,
