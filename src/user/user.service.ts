@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
+import { UserResponseDto } from './dto/user.response.dto';
 
 @Injectable()
 export class UserService {
@@ -11,8 +12,8 @@ export class UserService {
     return this.prismaService.user.findMany();
   }
 
-  async getOneById(userId: string): Promise<User> {
-    return this.prismaService.user.findUnique({
+  async getOneById(userId: string): Promise<UserResponseDto> {
+    const userById = await this.prismaService.user.findUnique({
       where: {
         id: userId,
       },
@@ -21,6 +22,7 @@ export class UserService {
         cars: true,
       },
     });
+    return new UserResponseDto(userById);
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
@@ -32,7 +34,6 @@ export class UserService {
   }
 
   async saveToDB(data: Prisma.UserCreateInput): Promise<User> {
-    console.log(data);
     return this.prismaService.user.create({ data });
   }
 

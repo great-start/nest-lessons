@@ -23,6 +23,8 @@ export class AuthService {
         throw new HttpException('User has already exist', HttpStatus.BAD_REQUEST);
       }
 
+
+
       const hashPass = await bcrypt.hash(userToCreate.password, 5);
       const savedUser = await this.userService.saveToDB({
         ...userToCreate,
@@ -39,7 +41,6 @@ export class AuthService {
         refreshToken,
       };
     } catch (e) {
-      console.log(e);
       throw new HttpException(e.message, e.status);
     }
   }
