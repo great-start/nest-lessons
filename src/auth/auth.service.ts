@@ -10,12 +10,9 @@ import { ITokenPair } from './interface/auth.token.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private userService: UserService,
-    private tokenService: TokenService,
-  ) {}
+  constructor(private userService: UserService, private tokenService: TokenService) {}
 
-  async register(userToCreate: CreateUserDto, file: Express.Multer.File): Promise<Partial<ITokenPair>> {
+  async register(userToCreate: CreateUserDto, filePath: string): Promise<Partial<ITokenPair>> {
     try {
       const userFromDB = await this.userService.getUserByEmail(userToCreate.email);
 
@@ -23,13 +20,11 @@ export class AuthService {
         throw new HttpException('User has already exist', HttpStatus.BAD_REQUEST);
       }
 
-
-
       const hashPass = await bcrypt.hash(userToCreate.password, 5);
       const savedUser = await this.userService.saveToDB({
         ...userToCreate,
         password: hashPass,
-        // photo: filePath,
+        photo: filePath,
       });
 
       const tokenPair = await this.tokenService.getTokenPair(savedUser);

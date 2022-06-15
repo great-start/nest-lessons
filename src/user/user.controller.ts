@@ -8,6 +8,7 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Res,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,7 +17,6 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nes
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '../auth/jwt.guards';
-import { UserResponseDto } from './dto/user.response.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -87,5 +87,11 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   delete(@Param('id') id: string) {
     return this.userService.delete(id);
+  }
+
+  @Get('photos/:photo')
+  getPhoto(@Param('photo') photo: string, @Res() res) {
+    console.log(photo);
+    return res.sendFile(photo, { root: './photos' });
   }
 }

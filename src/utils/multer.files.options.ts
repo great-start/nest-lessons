@@ -4,7 +4,7 @@ import { constants } from '../constants/constants';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { extname } from 'path';
 
-export const MulterOptions = {
+export const MulterFilesOptions = {
   storage: diskStorage({
     destination: './photos',
     filename: (req, file: Express.Multer.File, cb) => {
@@ -12,7 +12,7 @@ export const MulterOptions = {
         .fill(null)
         .map(() => Math.round(Math.random() * 16).toString(16))
         .join('');
-      return cb(null, `${randomName}`);
+      return cb(null, `${randomName}${extname(file.originalname)}`);
     },
   }),
   fileFilter: (req: any, file: Express.Multer.File, cb: any) => {
@@ -20,10 +20,12 @@ export const MulterOptions = {
 
     if (!constants.FILE_MIMETYPES.includes(mimetype)) {
       cb(new HttpException(`Unsupported file type ${extname(file.originalname)}`, HttpStatus.BAD_REQUEST), false);
+      return;
     }
 
     if (size > constants.PHOTO_SIZE_MAX) {
       cb(new HttpException(`Too big file size`, HttpStatus.BAD_REQUEST), false);
+      return;
     }
 
     cb(null, true);

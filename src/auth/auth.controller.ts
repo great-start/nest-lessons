@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 import { AuthUserDto } from './dto/auth.user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { IRequestExtended } from './interface/extented.requets.interface';
-import { MulterOptions } from './multer.options';
+import { MulterFilesOptions } from '../utils/multer.files.options';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -29,9 +29,9 @@ export class AuthController {
   })
   @ApiBody({ type: CreateUserDto })
   @Post('/register')
-  @UseInterceptors(FileInterceptor('file', MulterOptions))
+  @UseInterceptors(FileInterceptor('file', MulterFilesOptions))
   registration(@Body() createUser: CreateUserDto, @UploadedFile() file: Express.Multer.File) {
-    return this.authService.register(createUser, file);
+    return this.authService.register(createUser, file.path);
   }
 
   @ApiOperation({
