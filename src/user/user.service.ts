@@ -8,7 +8,7 @@ import { UserResponseDto } from './dto/user.response.dto';
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async getAll(): Promise<User[]> {
+  getAll(): Promise<UserResponseDto[]> {
     return this.prismaService.user.findMany();
   }
 
@@ -55,5 +55,9 @@ export class UserService {
         id: userId,
       },
     });
+  }
+
+  async countUsers(): Promise<number> {
+    return this.prismaService.user.count();
   }
 }

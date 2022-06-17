@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { WsResponse } from '@nestjs/websockets';
 
 export class UserResponseDto {
   id: string;
@@ -15,4 +16,9 @@ export class UserResponseDto {
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);
   }
+}
+
+export class UserResponseDtoWs implements WsResponse {
+  data: UserResponseDto;
+  event: string;
 }

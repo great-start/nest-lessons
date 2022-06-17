@@ -17,6 +17,7 @@ import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nes
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '../auth/jwt.guards';
+import { UserResponseDto } from './dto/user.response.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -38,7 +39,8 @@ export class UserController {
       ],
     },
   })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   getAll() {
     return this.userService.getAll();
   }

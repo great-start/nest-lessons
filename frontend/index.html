@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+  <title>Document</title>
+</head>
+<body>
+<div id='messages' style='background-color: aliceblue'>Messages</div>
+<script>
+
+  const socket = io("http://localhost:5000");
+
+  const messages = document.getElementById('messages');
+
+
+  socket.emit('getUsers', 'cc385371-6dc8-4e9f-bd7d-5faa138a7e91');
+
+  socket.on('users', (data) => {
+      const test = document.createElement('p');
+      test.innerText = JSON.stringify(data);
+      messages.appendChild(test);
+    })
+
+  socket.on('message', (data) => {
+    console.log(data);
+    const test = document.createElement('p');
+    test.innerText = JSON.stringify(data);
+    messages.appendChild(test);
+  })
+
+
+</script>
+</body>
+</html>

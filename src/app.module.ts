@@ -6,10 +6,24 @@ import { PostModule } from './post/post.module';
 import { CarModule } from './car/car.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ChatService } from './chat/chat.service';
+import { ChatModule } from './chat/chat.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksService } from './tasks/tasks.service';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
-  imports: [UserModule, PostModule, CarModule, AuthModule, ConfigModule.forRoot()],
+  imports: [
+    UserModule,
+    PostModule,
+    CarModule,
+    AuthModule,
+    ConfigModule.forRoot(),
+    ChatModule,
+    ScheduleModule.forRoot(),
+    TasksModule,
+  ],
   controllers: [],
-  providers: [AppService],
+  providers: [AppService, ChatService, TasksService],
 })
 export class AppModule {}
