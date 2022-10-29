@@ -9,9 +9,7 @@ import { constants } from '../../constants/constants';
 
 @Injectable()
 export class LogoutMiddleware implements NestMiddleware {
-  constructor(private tokenService: TokenService,
-              private jwtService: JwtService,
-              private userService:UserService) {}
+  constructor(private tokenService: TokenService, private jwtService: JwtService, private userService: UserService) {}
 
   async use(req: IRequestExtended, res: Response, next: NextFunction) {
     try {

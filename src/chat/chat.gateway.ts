@@ -52,7 +52,7 @@ export class ChatGateway implements OnGatewayInit {
     // return { event: 'users', data: users };
   }
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  // @Cron(CronExpression.EVERY_5_SECONDS)
   async clientSend() {
     const promise = await this.sendUsersQuantity();
     this.server.emit('users', { data: promise });

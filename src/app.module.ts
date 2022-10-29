@@ -11,6 +11,8 @@ import { ChatModule } from './chat/chat.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from './tasks/tasks.service';
 import { TasksModule } from './tasks/tasks.module';
+import { AsdModule } from './asd/asd.module';
+import { AsdModule } from './asd/asd.module';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import { TasksModule } from './tasks/tasks.module';
     ChatModule,
     ScheduleModule.forRoot(),
     TasksModule,
+    AsdModule,
   ],
   controllers: [],
   providers: [AppService, ChatService, TasksService],
